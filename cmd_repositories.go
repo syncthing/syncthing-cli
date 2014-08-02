@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"github.com/AudriusButkevicius/cli"
-	"github.com/calmh/syncthing/config"
 	"strings"
+
+	"github.com/AudriusButkevicius/cli"
+	"github.com/syncthing/syncthing/config"
 )
 
 func init() {

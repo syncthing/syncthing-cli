@@ -3,9 +3,6 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/AudriusButkevicius/cli"
-	"github.com/calmh/syncthing/config"
-	"github.com/calmh/syncthing/protocol"
 	"io/ioutil"
 	"net/http"
 	"os"
@@ -15,6 +12,10 @@ import (
 	"strings"
 	"text/tabwriter"
 	"unicode"
+
+	"github.com/AudriusButkevicius/cli"
+	"github.com/syncthing/syncthing/config"
+	"github.com/syncthing/syncthing/protocol"
 )
 
 func responseToBArray(response *http.Response) []byte {
