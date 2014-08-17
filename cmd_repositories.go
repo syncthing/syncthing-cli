@@ -266,7 +266,9 @@ func repositoriesNodesAdd(c *cli.Context) {
 		}
 		for _, node := range cfg.Nodes {
 			if node.NodeID == nid {
-				cfg.Repositories[i].Nodes = append(repo.Nodes, node)
+				cfg.Repositories[i].Nodes = append(repo.Nodes, config.RepositoryNodeConfiguration{
+					NodeID: node.NodeID,
+				})
 				setConfig(c, cfg)
 				return
 			}
@@ -305,7 +307,7 @@ func repositoriesNodesClear(c *cli.Context) {
 		if repo.ID != rid {
 			continue
 		}
-		cfg.Repositories[i].Nodes = []config.NodeConfiguration{}
+		cfg.Repositories[i].Nodes = []config.RepositoryNodeConfiguration{}
 		setConfig(c, cfg)
 		return
 	}
