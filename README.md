@@ -1,7 +1,7 @@
 syncthing-cli
 =============
 
-[![Latest Build](http://img.shields.io/jenkins/s/http/build.syncthing.net/syncthing-cli.svg?style=flat-square)](http://build.syncthing.net/job/syncthing-cli/lastSuccessfulBuild/artifact/)
+[![Latest Build](http://img.shields.io/jenkins/s/http/build.syncthing.net/syncthing-cli.svg?style=flat-square)](http://build.syncthing.net/job/syncthing-cli/lastBuild/)
 
 A CLI that talks to the Syncthing REST interface.
 
