@@ -47,7 +47,6 @@ func optionsDump(c *cli.Context) {
 
 	fmt.Fprintln(writer, "Maximum outstanding requests:\t", cfg.ParallelRequests, "\t(requests)")
 	fmt.Fprintln(writer, "Outgoing rate limit in KiB/s:\t", cfg.MaxSendKbps, "\t(maxsend)")
-	fmt.Fprintln(writer, "Rescan interval in seconds:\t", cfg.RescanIntervalS, "\t(rescan)")
 	fmt.Fprintln(writer, "Reconnect interval in seconds:\t", cfg.ReconnectIntervalS, "\t(reconnect)")
 	fmt.Fprintln(writer, "Start browser:\t", cfg.StartBrowser, "\t(browser)")
 	fmt.Fprintln(writer, "Enable UPnP:\t", cfg.UPnPEnabled, "\t(upnp)")
@@ -84,8 +83,6 @@ func optionsGet(c *cli.Context) {
 		fmt.Println(cfg.ParallelRequests)
 	case "maxsend":
 		fmt.Println(cfg.MaxSendKbps)
-	case "rescan":
-		fmt.Println(cfg.RescanIntervalS)
 	case "reconnect":
 		fmt.Println(cfg.ReconnectIntervalS)
 	case "browser":
@@ -131,8 +128,6 @@ func optionsSet(c *cli.Context) {
 		config.Options.ParallelRequests = parseUint(val)
 	case "maxsend":
 		config.Options.MaxSendKbps = parseUint(val)
-	case "rescan":
-		config.Options.RescanIntervalS = parseUint(val)
 	case "reconnect":
 		config.Options.ReconnectIntervalS = parseUint(val)
 	case "browser":

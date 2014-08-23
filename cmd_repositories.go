@@ -98,6 +98,7 @@ func repositoriesList(c *cli.Context) {
 		fmt.Fprintln(writer, "Directory:\t", repo.Directory, "\t(directory)")
 		fmt.Fprintln(writer, "Repository master:\t", repo.ReadOnly, "\t(master)")
 		fmt.Fprintln(writer, "Ignore permissions:\t", repo.IgnorePerms, "\t(permissions)")
+		fmt.Fprintln(writer, "Rescan interval in seconds:\t", repo.RescanIntervalS, "\t(rescan)")
 
 		if repo.Versioning.Type != "" {
 			fmt.Fprintln(writer, "Versioning:\t", repo.Versioning.Type, "\t(versioning)")
@@ -162,6 +163,8 @@ func repositoriesGet(c *cli.Context) {
 			fmt.Println(repo.ReadOnly)
 		case "permissions":
 			fmt.Println(repo.IgnorePerms)
+		case "rescan":
+			fmt.Println(repo.RescanIntervalS)
 		case "versioning":
 			if repo.Versioning.Type != "" {
 				fmt.Println(repo.Versioning.Type)
@@ -195,6 +198,8 @@ func repositoriesSet(c *cli.Context) {
 			cfg.Repositories[i].ReadOnly = parseBool(val)
 		case "permissions":
 			cfg.Repositories[i].IgnorePerms = parseBool(val)
+		case "rescan":
+			cfg.Repositories[i].RescanIntervalS = parseInt(val)
 		case "versioning":
 			cfg.Repositories[i].Versioning.Type = val
 		default:
