@@ -24,4 +24,6 @@ var jsonAttributeLabels map[string]string = map[string]string{
 	"goroutines":     "Number of Go routines",
 	"myID":           "Client ID",
 	"tilde":          "Tilde expands to",
+	"arch":           "Architecture",
+	"os":             "OS",
 }

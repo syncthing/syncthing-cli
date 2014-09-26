@@ -70,6 +70,7 @@ func generalStatus(c *cli.Context) {
 
 func generalVersion(c *cli.Context) {
 	response := httpGet(c, "version")
-	output := string(responseToBArray(response))
-	fmt.Println(output)
+	version := make(map[string]interface{})
+	json.Unmarshal(responseToBArray(response), &version)
+	prettyPrintJson(version)
 }
