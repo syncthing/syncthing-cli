@@ -38,10 +38,10 @@ func init() {
 
 func errorsShow(c *cli.Context) {
 	response := httpGet(c, "errors")
-	var data []map[string]interface{}
+	var data map[string][]map[string]interface{}
 	json.Unmarshal(responseToBArray(response), &data)
 	writer := newTableWriter()
-	for _, item := range data {
+	for _, item := range data["errors"] {
 		time := item["Time"].(string)[:19]
 		time = strings.Replace(time, "T", " ", 1)
 		err := item["Error"].(string)
