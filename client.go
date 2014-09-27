@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"crypto/tls"
 	"net/http"
 	"strings"
 
@@ -27,9 +28,15 @@ func getClient(c *cli.Context) *APIClient {
 	if !strings.HasPrefix(endpoint, "http") {
 		endpoint = "http://" + endpoint
 	}
-
+	httpClient := http.Client{
+		Transport: &http.Transport{
+			TLSClientConfig: &tls.Config{
+				InsecureSkipVerify: c.GlobalBool("insecure"),
+			},
+		},
+	}
 	client := APIClient{
-		httpClient: http.Client{},
+		httpClient: httpClient,
 		endpoint:   endpoint,
 		apikey:     c.GlobalString("apikey"),
 		username:   c.GlobalString("username"),

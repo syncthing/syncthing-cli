@@ -50,6 +50,11 @@ func main() {
 			Usage:  "Password",
 			EnvVar: "STPASSWORD",
 		},
+		cli.BoolFlag{
+			Name:   "insecure, i",
+			Usage:  "Do not verify SSL certificate",
+			EnvVar: "STINSECURE",
+		},
 	}
 
 	sort.Sort(ByAlphabet(cliCommands))
