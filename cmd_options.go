@@ -46,7 +46,6 @@ func optionsDump(c *cli.Context) {
 	fmt.Fprintln(writer, "Local discovery enabled:\t", cfg.LocalAnnEnabled, "\t(localannenabled)")
 	fmt.Fprintln(writer, "Local discovery port:\t", cfg.LocalAnnPort, "\t(localannport)")
 
-	fmt.Fprintln(writer, "Maximum outstanding requests:\t", cfg.ParallelRequests, "\t(requests)")
 	fmt.Fprintln(writer, "Outgoing rate limit in KiB/s:\t", cfg.MaxSendKbps, "\t(maxsend)")
 	fmt.Fprintln(writer, "Incoming rate limit in KiB/s:\t", cfg.MaxRecvKbps, "\t(maxrecv)")
 	fmt.Fprintln(writer, "Reconnect interval in seconds:\t", cfg.ReconnectIntervalS, "\t(reconnect)")
@@ -84,8 +83,6 @@ func optionsGet(c *cli.Context) {
 		fmt.Println(cfg.LocalAnnEnabled)
 	case "localannport":
 		fmt.Println(cfg.LocalAnnPort)
-	case "requests":
-		fmt.Println(cfg.ParallelRequests)
 	case "maxsend":
 		fmt.Println(cfg.MaxSendKbps)
 	case "maxrecv":
@@ -114,7 +111,7 @@ func optionsGet(c *cli.Context) {
 	case "wake":
 		fmt.Println(cfg.RestartOnWakeup)
 	default:
-		die("Invalid setting: " + arg + "\nAvailable settings: address, globalannenabled, globalannserver, localannenabled, localannport, requests, maxsend, maxrecv, reconnect, browser, upnp, upnplease, upnprenew, reporting, wake")
+		die("Invalid setting: " + arg + "\nAvailable settings: address, globalannenabled, globalannserver, localannenabled, localannport, maxsend, maxrecv, reconnect, browser, upnp, upnplease, upnprenew, reporting, wake")
 	}
 }
 
@@ -137,8 +134,6 @@ func optionsSet(c *cli.Context) {
 		config.Options.LocalAnnEnabled = parseBool(val)
 	case "localannport":
 		config.Options.LocalAnnPort = parsePort(val)
-	case "requests":
-		config.Options.ParallelRequests = parseUint(val)
 	case "maxsend":
 		config.Options.MaxSendKbps = parseUint(val)
 	case "maxrecv":
@@ -168,7 +163,7 @@ func optionsSet(c *cli.Context) {
 	case "wake":
 		config.Options.RestartOnWakeup = parseBool(val)
 	default:
-		die("Invalid setting: " + arg + "\nAvailable settings: address, globalannenabled, globalannserver, localannenabled, localannport, requests, maxsend, maxrecv, reconnect, browser, upnp, upnplease, upnprenew, reporting, wake")
+		die("Invalid setting: " + arg + "\nAvailable settings: address, globalannenabled, globalannserver, localannenabled, localannport, maxsend, maxrecv, reconnect, browser, upnp, upnplease, upnprenew, reporting, wake")
 	}
 	setConfig(c, config)
 }
