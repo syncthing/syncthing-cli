@@ -59,6 +59,9 @@ func nodesList(c *cli.Context) {
 		fmt.Fprintln(writer, "ID:\t", node.NodeID, "\t")
 		fmt.Fprintln(writer, "Name:\t", node.Name, "\t(name)")
 		fmt.Fprintln(writer, "Address:\t", strings.Join(node.Addresses, " "), "\t(address)")
+		fmt.Fprintln(writer, "Compression:\t", node.Compression, "\t(compression)")
+		fmt.Fprintln(writer, "Certificate name:\t", node.CertName, "\t(certname)")
+		fmt.Fprintln(writer, "Introducer:\t", node.Introducer, "\t(introducer)")
 		first = false
 	}
 	writer.Flush()
@@ -132,8 +135,14 @@ func nodesGet(c *cli.Context) {
 			fmt.Println(node.Name)
 		case "address":
 			fmt.Println(strings.Join(node.Addresses, "\n"))
+		case "compression":
+			fmt.Println(node.Compression)
+		case "certname":
+			fmt.Println(node.CertName)
+		case "introducer":
+			fmt.Println(node.Introducer)
 		default:
-			die("Invalid property: " + arg + "\nAvailable properties: name, address")
+			die("Invalid property: " + arg + "\nAvailable properties: name, address, compression, certname, introducer")
 		}
 		return
 	}
@@ -160,8 +169,14 @@ func nodesSet(c *cli.Context) {
 				validAddress(item)
 			}
 			config.Nodes[i].Addresses = c.Args()[2:]
+		case "compression":
+			config.Nodes[i].Compression = parseBool(c.Args()[2])
+		case "certname":
+			config.Nodes[i].CertName = strings.Join(c.Args()[2:], " ")
+		case "introducer":
+			config.Nodes[i].Introducer = parseBool(c.Args()[2])
 		default:
-			die("Invalid property: " + arg + "\nAvailable properties: name, address")
+			die("Invalid property: " + arg + "\nAvailable properties: name, address, compression, certname, introducer")
 		}
 		setConfig(c, config)
 		return
