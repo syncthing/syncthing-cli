@@ -1,9 +1,10 @@
 package main
 
 import (
-	"github.com/AudriusButkevicius/cli"
 	"sort"
 	"time"
+
+	"github.com/AudriusButkevicius/cli"
 )
 
 type ByAlphabet []cli.Command

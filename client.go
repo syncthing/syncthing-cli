@@ -2,9 +2,10 @@ package main
 
 import (
 	"bytes"
-	"github.com/AudriusButkevicius/cli"
 	"net/http"
 	"strings"
+
+	"github.com/AudriusButkevicius/cli"
 )
 
 type APIClient struct {

@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/AudriusButkevicius/cli"
 	"strings"
+
+	"github.com/AudriusButkevicius/cli"
 )
 
 func init() {

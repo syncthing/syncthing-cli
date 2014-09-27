@@ -3,8 +3,9 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/AudriusButkevicius/cli"
 	"strings"
+
+	"github.com/AudriusButkevicius/cli"
 )
 
 func init() {
