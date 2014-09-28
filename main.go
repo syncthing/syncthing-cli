@@ -2,7 +2,6 @@ package main
 
 import (
 	"sort"
-	"time"
 
 	"github.com/AudriusButkevicius/cli"
 )
@@ -20,7 +19,6 @@ func main() {
 	app.Name = "syncthing-cli"
 	app.Author = "Audrius Butkevičius"
 	app.Email = "audrius.butkevicius@gmail.com"
-	app.Compiled = time.Now()
 	app.Usage = "Syncthing command line interface"
 	app.Version = "0.1"
 	app.HideHelp = true

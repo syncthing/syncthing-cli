@@ -21,7 +21,7 @@ func init() {
 			},
 			{
 				Name:     "connections",
-				Usage:    "Report about connections to other nodes",
+				Usage:    "Report about connections to other devices",
 				Requires: &cli.Requires{},
 				Action:   reportConnections,
 			},
@@ -52,7 +52,7 @@ func reportConnections(c *cli.Context) {
 			overall = value
 			continue
 		}
-		value["Node ID"] = key
+		value["Device ID"] = key
 		prettyPrintJson(value)
 		fmt.Println()
 	}

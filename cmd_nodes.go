@@ -10,75 +10,75 @@ import (
 
 func init() {
 	cliCommands = append(cliCommands, cli.Command{
-		Name:     "nodes",
+		Name:     "devices",
 		HideHelp: true,
-		Usage:    "Node command group",
+		Usage:    "Device command group",
 		Subcommands: []cli.Command{
 			{
 				Name:     "list",
-				Usage:    "List registered nodes",
+				Usage:    "List registered devices",
 				Requires: &cli.Requires{},
-				Action:   nodesList,
+				Action:   devicesList,
 			},
 			{
 				Name:     "add",
-				Usage:    "Add a new node",
-				Requires: &cli.Requires{"node id", "node name?"},
-				Action:   nodesAdd,
+				Usage:    "Add a new device",
+				Requires: &cli.Requires{"device id", "device name?"},
+				Action:   devicesAdd,
 			},
 			{
 				Name:     "remove",
-				Usage:    "Remove an existing node",
-				Requires: &cli.Requires{"node id"},
-				Action:   nodesRemove,
+				Usage:    "Remove an existing device",
+				Requires: &cli.Requires{"device id"},
+				Action:   devicesRemove,
 			},
 			{
 				Name:     "get",
-				Usage:    "Get a property of a node",
-				Requires: &cli.Requires{"node id", "property"},
-				Action:   nodesGet,
+				Usage:    "Get a property of a device",
+				Requires: &cli.Requires{"device id", "property"},
+				Action:   devicesGet,
 			},
 			{
 				Name:     "set",
-				Usage:    "Set a property of a node",
-				Requires: &cli.Requires{"node id", "property", "value..."},
-				Action:   nodesSet,
+				Usage:    "Set a property of a device",
+				Requires: &cli.Requires{"device id", "property", "value..."},
+				Action:   devicesSet,
 			},
 		},
 	})
 }
 
-func nodesList(c *cli.Context) {
+func devicesList(c *cli.Context) {
 	cfg := getConfig(c)
 	first := true
 	writer := newTableWriter()
-	for _, node := range cfg.Nodes {
+	for _, device := range cfg.Devices {
 		if !first {
 			fmt.Fprintln(writer)
 		}
-		fmt.Fprintln(writer, "ID:\t", node.NodeID, "\t")
-		fmt.Fprintln(writer, "Name:\t", node.Name, "\t(name)")
-		fmt.Fprintln(writer, "Address:\t", strings.Join(node.Addresses, " "), "\t(address)")
-		fmt.Fprintln(writer, "Compression:\t", node.Compression, "\t(compression)")
-		fmt.Fprintln(writer, "Certificate name:\t", node.CertName, "\t(certname)")
-		fmt.Fprintln(writer, "Introducer:\t", node.Introducer, "\t(introducer)")
+		fmt.Fprintln(writer, "ID:\t", device.DeviceID, "\t")
+		fmt.Fprintln(writer, "Name:\t", device.Name, "\t(name)")
+		fmt.Fprintln(writer, "Address:\t", strings.Join(device.Addresses, " "), "\t(address)")
+		fmt.Fprintln(writer, "Compression:\t", device.Compression, "\t(compression)")
+		fmt.Fprintln(writer, "Certificate name:\t", device.CertName, "\t(certname)")
+		fmt.Fprintln(writer, "Introducer:\t", device.Introducer, "\t(introducer)")
 		first = false
 	}
 	writer.Flush()
 }
 
-func nodesAdd(c *cli.Context) {
+func devicesAdd(c *cli.Context) {
 	nid := c.Args()[0]
-	id := parseNodeID(nid)
+	id := parseDeviceID(nid)
 
-	newNode := config.NodeConfiguration{
-		NodeID:    id,
+	newDevice := config.DeviceConfiguration{
+		DeviceID:  id,
 		Name:      nid,
 		Addresses: []string{"dynamic"},
 	}
 
 	if len(c.Args()) > 1 {
-		newNode.Name = c.Args()[1]
+		newDevice.Name = c.Args()[1]
 	}
 
 	if len(c.Args()) > 2 {
@@ -89,78 +89,78 @@ func nodesAdd(c *cli.Context) {
 			}
 			validAddress(item)
 		}
-		newNode.Addresses = addresses
+		newDevice.Addresses = addresses
 	}
 
 	cfg := getConfig(c)
-	for _, node := range cfg.Nodes {
-		if node.NodeID == id {
-			die("Node " + nid + " already exists")
+	for _, device := range cfg.Devices {
+		if device.DeviceID == id {
+			die("Device " + nid + " already exists")
 		}
 	}
-	cfg.Nodes = append(cfg.Nodes, newNode)
+	cfg.Devices = append(cfg.Devices, newDevice)
 	setConfig(c, cfg)
 }
 
-func nodesRemove(c *cli.Context) {
+func devicesRemove(c *cli.Context) {
 	nid := c.Args()[0]
-	id := parseNodeID(nid)
+	id := parseDeviceID(nid)
 	if nid == getMyID(c) {
 		die("Cannot remove yourself")
 	}
 	cfg := getConfig(c)
-	for i, node := range cfg.Nodes {
-		if node.NodeID == id {
-			last := len(cfg.Nodes) - 1
-			cfg.Nodes[i] = cfg.Nodes[last]
-			cfg.Nodes = cfg.Nodes[:last]
+	for i, device := range cfg.Devices {
+		if device.DeviceID == id {
+			last := len(cfg.Devices) - 1
+			cfg.Devices[i] = cfg.Devices[last]
+			cfg.Devices = cfg.Devices[:last]
 			setConfig(c, cfg)
 			return
 		}
 	}
-	die("Node " + nid + " not found")
+	die("Device " + nid + " not found")
 }
 
-func nodesGet(c *cli.Context) {
+func devicesGet(c *cli.Context) {
 	nid := c.Args()[0]
-	id := parseNodeID(nid)
+	id := parseDeviceID(nid)
 	arg := c.Args()[1]
 	cfg := getConfig(c)
-	for _, node := range cfg.Nodes {
-		if node.NodeID != id {
+	for _, device := range cfg.Devices {
+		if device.DeviceID != id {
 			continue
 		}
 		switch strings.ToLower(arg) {
 		case "name":
-			fmt.Println(node.Name)
+			fmt.Println(device.Name)
 		case "address":
-			fmt.Println(strings.Join(node.Addresses, "\n"))
+			fmt.Println(strings.Join(device.Addresses, "\n"))
 		case "compression":
-			fmt.Println(node.Compression)
+			fmt.Println(device.Compression)
 		case "certname":
-			fmt.Println(node.CertName)
+			fmt.Println(device.CertName)
 		case "introducer":
-			fmt.Println(node.Introducer)
+			fmt.Println(device.Introducer)
 		default:
 			die("Invalid property: " + arg + "\nAvailable properties: name, address, compression, certname, introducer")
 		}
 		return
 	}
-	die("Node " + nid + " not found")
+	die("Device " + nid + " not found")
 }
 
-func nodesSet(c *cli.Context) {
+func devicesSet(c *cli.Context) {
 	nid := c.Args()[0]
-	id := parseNodeID(nid)
+	id := parseDeviceID(nid)
 	arg := c.Args()[1]
 	config := getConfig(c)
-	for i, node := range config.Nodes {
-		if node.NodeID != id {
+	for i, device := range config.Devices {
+		if device.DeviceID != id {
 			continue
 		}
 		switch strings.ToLower(arg) {
 		case "name":
-			config.Nodes[i].Name = strings.Join(c.Args()[2:], " ")
+			config.Devices[i].Name = strings.Join(c.Args()[2:], " ")
 		case "address":
 			for _, item := range c.Args()[2:] {
 				if item == "dynamic" {
@@ -168,18 +168,18 @@ func nodesSet(c *cli.Context) {
 				}
 				validAddress(item)
 			}
-			config.Nodes[i].Addresses = c.Args()[2:]
+			config.Devices[i].Addresses = c.Args()[2:]
 		case "compression":
-			config.Nodes[i].Compression = parseBool(c.Args()[2])
+			config.Devices[i].Compression = parseBool(c.Args()[2])
 		case "certname":
-			config.Nodes[i].CertName = strings.Join(c.Args()[2:], " ")
+			config.Devices[i].CertName = strings.Join(c.Args()[2:], " ")
 		case "introducer":
-			config.Nodes[i].Introducer = parseBool(c.Args()[2])
+			config.Devices[i].Introducer = parseBool(c.Args()[2])
 		default:
 			die("Invalid property: " + arg + "\nAvailable properties: name, address, compression, certname, introducer")
 		}
 		setConfig(c, config)
 		return
 	}
-	die("Node " + nid + " not found")
+	die("Device " + nid + " not found")
 }

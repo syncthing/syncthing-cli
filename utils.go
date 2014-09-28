@@ -154,10 +154,10 @@ func validAddress(input string) {
 	parsePort(tokens[1])
 }
 
-func parseNodeID(input string) protocol.NodeID {
-	node, err := protocol.NodeIDFromString(input)
+func parseDeviceID(input string) protocol.DeviceID {
+	device, err := protocol.DeviceIDFromString(input)
 	if err != nil {
-		die(input + " is not a valid node id")
+		die(input + " is not a valid device id")
 	}
-	return node
+	return device
 }

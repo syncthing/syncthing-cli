@@ -35,7 +35,7 @@ func init() {
 		},
 		{
 			Name:     "reset",
-			Usage:    "Reset syncthing deleting all repositories and nodes",
+			Usage:    "Reset syncthing deleting all folders and devices",
 			Requires: &cli.Requires{},
 			Action:   wrappedHttpPost("reset"),
 		},

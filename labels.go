@@ -1,14 +1,14 @@
 package main
 
 var jsonAttributeLabels map[string]string = map[string]string{
-	"repoMaxMiB":     "Largest repository size in MiB",
-	"repoMaxFiles":   "Largest repository file count",
+	"folderMaxMiB":   "Largest folder size in MiB",
+	"folderMaxFiles": "Largest folder file count",
 	"longVersion":    "Long version",
 	"totMiB":         "Total size in MiB",
 	"totFiles":       "Total files",
 	"uniqueID":       "Unique ID",
-	"numRepos":       "Repository count",
-	"numNodes":       "Node count",
+	"numFolders":     "Folder count",
+	"numDevices":     "Device count",
 	"memoryUsageMiB": "Memory usage in MiB",
 	"memorySize":     "Total memory in MiB",
 	"sha256Perf":     "SHA256 Benchmark",

@@ -10,75 +10,75 @@ import (
 
 func init() {
 	cliCommands = append(cliCommands, cli.Command{
-		Name:     "repositories",
+		Name:     "folders",
 		HideHelp: true,
-		Usage:    "Repository command group",
+		Usage:    "Folder command group",
 		Subcommands: []cli.Command{
 			{
 				Name:     "list",
-				Usage:    "List available repositories",
+				Usage:    "List available folders",
 				Requires: &cli.Requires{},
-				Action:   repositoriesList,
+				Action:   foldersList,
 			},
 			{
 				Name:     "add",
-				Usage:    "Add a new repository",
-				Requires: &cli.Requires{"repository id", "directory"},
-				Action:   repositoriesAdd,
+				Usage:    "Add a new folder",
+				Requires: &cli.Requires{"folder id", "directory"},
+				Action:   foldersAdd,
 			},
 			{
 				Name:     "remove",
-				Usage:    "Remove an existing repository",
-				Requires: &cli.Requires{"repository id"},
-				Action:   repositoriesRemove,
+				Usage:    "Remove an existing folder",
+				Requires: &cli.Requires{"folder id"},
+				Action:   foldersRemove,
 			},
 
 			{
 				Name:     "get",
-				Usage:    "Get a property of a repository",
-				Requires: &cli.Requires{"repository id", "property"},
-				Action:   repositoriesGet,
+				Usage:    "Get a property of a folder",
+				Requires: &cli.Requires{"folder id", "property"},
+				Action:   foldersGet,
 			},
 			{
 				Name:     "set",
-				Usage:    "Set a property of a repository",
-				Requires: &cli.Requires{"repository id", "property", "value..."},
-				Action:   repositoriesSet,
+				Usage:    "Set a property of a folder",
+				Requires: &cli.Requires{"folder id", "property", "value..."},
+				Action:   foldersSet,
 			},
 			{
 				Name:     "unset",
-				Usage:    "Unset a property of a repository",
-				Requires: &cli.Requires{"repository id", "property"},
-				Action:   repositoriesUnset,
+				Usage:    "Unset a property of a folder",
+				Requires: &cli.Requires{"folder id", "property"},
+				Action:   foldersUnset,
 			},
 			{
-				Name:     "nodes",
-				Usage:    "Repository nodes command group",
+				Name:     "devices",
+				Usage:    "Folder devices command group",
 				HideHelp: true,
 				Subcommands: []cli.Command{
 					{
 						Name:     "list",
-						Usage:    "List of nodes which the repository is shared with",
-						Requires: &cli.Requires{"repository id"},
-						Action:   repositoriesNodesList,
+						Usage:    "List of devices which the folder is shared with",
+						Requires: &cli.Requires{"folder id"},
+						Action:   foldersDevicesList,
 					},
 					{
 						Name:     "add",
-						Usage:    "Share a repository with a node",
-						Requires: &cli.Requires{"repository id", "node id"},
-						Action:   repositoriesNodesAdd,
+						Usage:    "Share a folder with a device",
+						Requires: &cli.Requires{"folder id", "device id"},
+						Action:   foldersDevicesAdd,
 					},
 					{
 						Name:     "remove",
-						Usage:    "Unshare a repository with a node",
-						Requires: &cli.Requires{"repository id", "node id"},
-						Action:   repositoriesNodesRemove,
+						Usage:    "Unshare a folder with a device",
+						Requires: &cli.Requires{"folder id", "device id"},
+						Action:   foldersDevicesRemove,
 					},
 					{
 						Name:     "clear",
-						Usage:    "Unshare a repository with all nodes",
-						Requires: &cli.Requires{"repository id"},
-						Action:   repositoriesNodesClear,
+						Usage:    "Unshare a folder with all devices",
+						Requires: &cli.Requires{"folder id"},
+						Action:   foldersDevicesClear,
 					},
 				},
 			},
@@ -86,70 +86,70 @@ func init() {
 	})
 }
 
-func repositoriesList(c *cli.Context) {
+func foldersList(c *cli.Context) {
 	cfg := getConfig(c)
 	first := true
 	writer := newTableWriter()
-	for _, repo := range cfg.Repositories {
+	for _, folder := range cfg.Folders {
 		if !first {
 			fmt.Fprintln(writer)
 		}
-		fmt.Fprintln(writer, "ID:\t", repo.ID, "\t")
-		fmt.Fprintln(writer, "Directory:\t", repo.Directory, "\t(directory)")
-		fmt.Fprintln(writer, "Repository master:\t", repo.ReadOnly, "\t(master)")
-		fmt.Fprintln(writer, "Ignore permissions:\t", repo.IgnorePerms, "\t(permissions)")
-		fmt.Fprintln(writer, "Rescan interval in seconds:\t", repo.RescanIntervalS, "\t(rescan)")
+		fmt.Fprintln(writer, "ID:\t", folder.ID, "\t")
+		fmt.Fprintln(writer, "Path:\t", folder.Path, "\t(directory)")
+		fmt.Fprintln(writer, "Folder master:\t", folder.ReadOnly, "\t(master)")
+		fmt.Fprintln(writer, "Ignore permissions:\t", folder.IgnorePerms, "\t(permissions)")
+		fmt.Fprintln(writer, "Rescan interval in seconds:\t", folder.RescanIntervalS, "\t(rescan)")
 
-		if repo.Versioning.Type != "" {
-			fmt.Fprintln(writer, "Versioning:\t", repo.Versioning.Type, "\t(versioning)")
-			for key, value := range repo.Versioning.Params {
+		if folder.Versioning.Type != "" {
+			fmt.Fprintln(writer, "Versioning:\t", folder.Versioning.Type, "\t(versioning)")
+			for key, value := range folder.Versioning.Params {
 				fmt.Fprintf(writer, "Versioning %s:\t %s \t(versioning-%s)\n", key, value, key)
 			}
 		}
-		if repo.Invalid != "" {
-			fmt.Fprintln(writer, "Invalid:\t", repo.Invalid, "\t")
+		if folder.Invalid != "" {
+			fmt.Fprintln(writer, "Invalid:\t", folder.Invalid, "\t")
 		}
 		first = false
 	}
 	writer.Flush()
 }
 
-func repositoriesAdd(c *cli.Context) {
+func foldersAdd(c *cli.Context) {
 	cfg := getConfig(c)
-	repo := config.RepositoryConfiguration{
-		ID:        c.Args()[0],
-		Directory: c.Args()[1],
+	folder := config.FolderConfiguration{
+		ID:   c.Args()[0],
+		Path: c.Args()[1],
 	}
-	cfg.Repositories = append(cfg.Repositories, repo)
+	cfg.Folders = append(cfg.Folders, folder)
 	setConfig(c, cfg)
 }
 
-func repositoriesRemove(c *cli.Context) {
+func foldersRemove(c *cli.Context) {
 	cfg := getConfig(c)
 	rid := c.Args()[0]
-	for i, repo := range cfg.Repositories {
-		if repo.ID == rid {
-			last := len(cfg.Repositories) - 1
-			cfg.Repositories[i] = cfg.Repositories[last]
-			cfg.Repositories = cfg.Repositories[:last]
+	for i, folder := range cfg.Folders {
+		if folder.ID == rid {
+			last := len(cfg.Folders) - 1
+			cfg.Folders[i] = cfg.Folders[last]
+			cfg.Folders = cfg.Folders[:last]
 			setConfig(c, cfg)
 			return
 		}
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesGet(c *cli.Context) {
+func foldersGet(c *cli.Context) {
 	cfg := getConfig(c)
 	rid := c.Args()[0]
 	arg := strings.ToLower(c.Args()[1])
-	for _, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for _, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
 		if strings.HasPrefix(arg, "versioning-") {
 			arg = arg[11:]
-			value, ok := repo.Versioning.Params[arg]
+			value, ok := folder.Versioning.Params[arg]
 			if ok {
 				fmt.Println(value)
 				return
@@ -158,71 +158,71 @@ func repositoriesGet(c *cli.Context) {
 		}
 		switch arg {
 		case "directory":
-			fmt.Println(repo.Directory)
+			fmt.Println(folder.Path)
 		case "master":
-			fmt.Println(repo.ReadOnly)
+			fmt.Println(folder.ReadOnly)
 		case "permissions":
-			fmt.Println(repo.IgnorePerms)
+			fmt.Println(folder.IgnorePerms)
 		case "rescan":
-			fmt.Println(repo.RescanIntervalS)
+			fmt.Println(folder.RescanIntervalS)
 		case "versioning":
-			if repo.Versioning.Type != "" {
-				fmt.Println(repo.Versioning.Type)
+			if folder.Versioning.Type != "" {
+				fmt.Println(folder.Versioning.Type)
 			}
 		default:
 			die("Invalid property: " + c.Args()[1] + "\nAvailable properties: directory, master, permissions, versioning, versioning-<key>")
 		}
 		return
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesSet(c *cli.Context) {
+func foldersSet(c *cli.Context) {
 	rid := c.Args()[0]
 	arg := strings.ToLower(c.Args()[1])
 	val := strings.Join(c.Args()[2:], " ")
 	cfg := getConfig(c)
-	for i, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for i, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
 		if strings.HasPrefix(arg, "versioning-") {
-			cfg.Repositories[i].Versioning.Params[arg[11:]] = val
+			cfg.Folders[i].Versioning.Params[arg[11:]] = val
 			setConfig(c, cfg)
 			return
 		}
 		switch arg {
 		case "directory":
-			cfg.Repositories[i].Directory = val
+			cfg.Folders[i].Path = val
 		case "master":
-			cfg.Repositories[i].ReadOnly = parseBool(val)
+			cfg.Folders[i].ReadOnly = parseBool(val)
 		case "permissions":
-			cfg.Repositories[i].IgnorePerms = parseBool(val)
+			cfg.Folders[i].IgnorePerms = parseBool(val)
 		case "rescan":
-			cfg.Repositories[i].RescanIntervalS = parseInt(val)
+			cfg.Folders[i].RescanIntervalS = parseInt(val)
 		case "versioning":
-			cfg.Repositories[i].Versioning.Type = val
+			cfg.Folders[i].Versioning.Type = val
 		default:
 			die("Invalid property: " + c.Args()[1] + "\nAvailable properties: directory, master, permissions, versioning, versioning-<key>")
 		}
 		setConfig(c, cfg)
 		return
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesUnset(c *cli.Context) {
+func foldersUnset(c *cli.Context) {
 	rid := c.Args()[0]
 	arg := strings.ToLower(c.Args()[1])
 	cfg := getConfig(c)
-	for i, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for i, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
 		if strings.HasPrefix(arg, "versioning-") {
 			arg = arg[11:]
-			if _, ok := repo.Versioning.Params[arg]; ok {
-				delete(cfg.Repositories[i].Versioning.Params, arg)
+			if _, ok := folder.Versioning.Params[arg]; ok {
+				delete(cfg.Folders[i].Versioning.Params, arg)
 				setConfig(c, cfg)
 				return
 			}
@@ -230,91 +230,91 @@ func repositoriesUnset(c *cli.Context) {
 		}
 		switch arg {
 		case "versioning":
-			cfg.Repositories[i].Versioning.Type = ""
-			cfg.Repositories[i].Versioning.Params = make(map[string]string)
+			cfg.Folders[i].Versioning.Type = ""
+			cfg.Folders[i].Versioning.Params = make(map[string]string)
 		default:
 			die("Invalid property: " + c.Args()[1] + "\nAvailable properties: versioning, versioning-<key>")
 		}
 		setConfig(c, cfg)
 		return
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesNodesList(c *cli.Context) {
+func foldersDevicesList(c *cli.Context) {
 	rid := c.Args()[0]
 	cfg := getConfig(c)
-	for _, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for _, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
-		for _, node := range repo.Nodes {
-			fmt.Println(node.NodeID)
+		for _, device := range folder.Devices {
+			fmt.Println(device.DeviceID)
 		}
 		return
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesNodesAdd(c *cli.Context) {
+func foldersDevicesAdd(c *cli.Context) {
 	rid := c.Args()[0]
-	nid := parseNodeID(c.Args()[1])
+	nid := parseDeviceID(c.Args()[1])
 	cfg := getConfig(c)
-	for i, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for i, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
-		for _, node := range repo.Nodes {
-			if node.NodeID == nid {
-				die("Node " + c.Args()[1] + " is already part of this repository")
+		for _, device := range folder.Devices {
+			if device.DeviceID == nid {
+				die("Device " + c.Args()[1] + " is already part of this folder")
 			}
 		}
-		for _, node := range cfg.Nodes {
-			if node.NodeID == nid {
-				cfg.Repositories[i].Nodes = append(repo.Nodes, config.RepositoryNodeConfiguration{
-					NodeID: node.NodeID,
+		for _, device := range cfg.Devices {
+			if device.DeviceID == nid {
+				cfg.Folders[i].Devices = append(folder.Devices, config.FolderDeviceConfiguration{
+					DeviceID: device.DeviceID,
 				})
 				setConfig(c, cfg)
 				return
 			}
 		}
-		die("Node " + c.Args()[1] + " not found in node list")
+		die("Device " + c.Args()[1] + " not found in device list")
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesNodesRemove(c *cli.Context) {
+func foldersDevicesRemove(c *cli.Context) {
 	rid := c.Args()[0]
-	nid := parseNodeID(c.Args()[1])
+	nid := parseDeviceID(c.Args()[1])
 	cfg := getConfig(c)
-	for ri, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for ri, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
-		for ni, node := range repo.Nodes {
-			if node.NodeID == nid {
-				last := len(repo.Nodes) - 1
-				cfg.Repositories[ri].Nodes[ni] = repo.Nodes[last]
-				cfg.Repositories[ri].Nodes = cfg.Repositories[ri].Nodes[:last]
+		for ni, device := range folder.Devices {
+			if device.DeviceID == nid {
+				last := len(folder.Devices) - 1
+				cfg.Folders[ri].Devices[ni] = folder.Devices[last]
+				cfg.Folders[ri].Devices = cfg.Folders[ri].Devices[:last]
 				setConfig(c, cfg)
 				return
 			}
 		}
-		die("Node " + c.Args()[1] + " not found")
+		die("Device " + c.Args()[1] + " not found")
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
 
-func repositoriesNodesClear(c *cli.Context) {
+func foldersDevicesClear(c *cli.Context) {
 	rid := c.Args()[0]
 	cfg := getConfig(c)
-	for i, repo := range cfg.Repositories {
-		if repo.ID != rid {
+	for i, folder := range cfg.Folders {
+		if folder.ID != rid {
 			continue
 		}
-		cfg.Repositories[i].Nodes = []config.RepositoryNodeConfiguration{}
+		cfg.Folders[i].Devices = []config.FolderDeviceConfiguration{}
 		setConfig(c, cfg)
 		return
 	}
-	die("Repository " + rid + " not found")
+	die("Folder " + rid + " not found")
 }
