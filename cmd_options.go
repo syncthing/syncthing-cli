@@ -41,7 +41,7 @@ func optionsDump(c *cli.Context) {
 
 	fmt.Fprintln(writer, "Sync protocol listen addresses:\t", strings.Join(cfg.ListenAddress, " "), "\t(address)")
 	fmt.Fprintln(writer, "Global discovery enabled:\t", cfg.GlobalAnnEnabled, "\t(globalannenabled)")
-	fmt.Fprintln(writer, "Global discovery server:\t", cfg.GlobalAnnServer, "\t(globalannserver)")
+	fmt.Fprintln(writer, "Global discovery servers:\t", strings.Join(cfg.GlobalAnnServers, " "), "\t(globalannserver)")
 
 	fmt.Fprintln(writer, "Local discovery enabled:\t", cfg.LocalAnnEnabled, "\t(localannenabled)")
 	fmt.Fprintln(writer, "Local discovery port:\t", cfg.LocalAnnPort, "\t(localannport)")
@@ -77,8 +77,8 @@ func optionsGet(c *cli.Context) {
 		fmt.Println(strings.Join(cfg.ListenAddress, "\n"))
 	case "globalannenabled":
 		fmt.Println(cfg.GlobalAnnEnabled)
-	case "globalannserver":
-		fmt.Println(cfg.GlobalAnnServer)
+	case "globalannservers":
+		fmt.Println(strings.Join(cfg.GlobalAnnServers, "\n"))
 	case "localannenabled":
 		fmt.Println(cfg.LocalAnnEnabled)
 	case "localannport":
@@ -128,8 +128,10 @@ func optionsSet(c *cli.Context) {
 	case "globalannenabled":
 		config.Options.GlobalAnnEnabled = parseBool(val)
 	case "globalannserver":
-		validAddress(val)
-		config.Options.GlobalAnnServer = val
+		for _, item := range c.Args().Tail() {
+			validAddress(item)
+		}
+		config.Options.GlobalAnnServers = c.Args().Tail()
 	case "localannenabled":
 		config.Options.LocalAnnEnabled = parseBool(val)
 	case "localannport":
