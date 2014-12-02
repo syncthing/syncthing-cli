@@ -118,9 +118,7 @@ func foldersList(c *cli.Context) {
 func foldersAdd(c *cli.Context) {
 	cfg := getConfig(c)
 	abs, err := filepath.Abs(c.Args()[1])
-	if err != nil {
-		die(err)
-	}
+	die(err)
 	folder := config.FolderConfiguration{
 		ID:   c.Args()[0],
 		Path: filepath.Clean(abs),
