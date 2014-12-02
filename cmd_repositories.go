@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 
 	"github.com/AudriusButkevicius/cli"
@@ -116,9 +117,11 @@ func foldersList(c *cli.Context) {
 
 func foldersAdd(c *cli.Context) {
 	cfg := getConfig(c)
+	abs, err := filepath.Abs(c.Args()[1])
+	die(err)
 	folder := config.FolderConfiguration{
 		ID:   c.Args()[0],
-		Path: c.Args()[1],
+		Path: filepath.Clean(abs),
 	}
 	cfg.Folders = append(cfg.Folders, folder)
 	setConfig(c, cfg)
