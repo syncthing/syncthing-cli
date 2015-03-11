@@ -136,7 +136,7 @@ func devicesGet(c *cli.Context) {
 		case "address":
 			fmt.Println(strings.Join(device.Addresses, "\n"))
 		case "compression":
-			fmt.Println(device.Compression)
+			fmt.Println(device.Compression.String())
 		case "certname":
 			fmt.Println(device.CertName)
 		case "introducer":
@@ -170,7 +170,8 @@ func devicesSet(c *cli.Context) {
 			}
 			config.Devices[i].Addresses = c.Args()[2:]
 		case "compression":
-			config.Devices[i].Compression = parseBool(c.Args()[2])
+			err := config.Devices[i].Compression.UnmarshalText([]byte(c.Args()[2]))
+			die(err)
 		case "certname":
 			config.Devices[i].CertName = strings.Join(c.Args()[2:], " ")
 		case "introducer":
