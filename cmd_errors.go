@@ -30,21 +30,21 @@ func init() {
 				Name:     "clear",
 				Usage:    "Clear pending errors",
 				Requires: &cli.Requires{},
-				Action:   wrappedHttpPost("error/clear"),
+				Action:   wrappedHttpPost("system/error/clear"),
 			},
 		},
 	})
 }
 
 func errorsShow(c *cli.Context) {
-	response := httpGet(c, "errors")
+	response := httpGet(c, "system/error")
 	var data map[string][]map[string]interface{}
 	json.Unmarshal(responseToBArray(response), &data)
 	writer := newTableWriter()
 	for _, item := range data["errors"] {
-		time := item["Time"].(string)[:19]
+		time := item["time"].(string)[:19]
 		time = strings.Replace(time, "T", " ", 1)
-		err := item["Error"].(string)
+		err := item["error"].(string)
 		err = strings.TrimSpace(err)
 		fmt.Fprintln(writer, time+":\t"+err)
 	}
@@ -53,7 +53,7 @@ func errorsShow(c *cli.Context) {
 
 func errorsPush(c *cli.Context) {
 	err := strings.Join(c.Args(), " ")
-	response := httpPost(c, "error", strings.TrimSpace(err))
+	response := httpPost(c, "system/error", strings.TrimSpace(err))
 	if response.StatusCode != 200 {
 		err = fmt.Sprint("Failed to push error\nStatus code: ", response.StatusCode)
 		body := string(responseToBArray(response))

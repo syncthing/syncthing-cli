@@ -25,25 +25,25 @@ func init() {
 			Name:     "restart",
 			Usage:    "Restart syncthing",
 			Requires: &cli.Requires{},
-			Action:   wrappedHttpPost("restart"),
+			Action:   wrappedHttpPost("system/restart"),
 		},
 		{
 			Name:     "shutdown",
 			Usage:    "Shutdown syncthing",
 			Requires: &cli.Requires{},
-			Action:   wrappedHttpPost("shutdown"),
+			Action:   wrappedHttpPost("system/shutdown"),
 		},
 		{
 			Name:     "reset",
 			Usage:    "Reset syncthing deleting all folders and devices",
 			Requires: &cli.Requires{},
-			Action:   wrappedHttpPost("reset"),
+			Action:   wrappedHttpPost("system/reset"),
 		},
 		{
 			Name:     "upgrade",
 			Usage:    "Upgrade syncthing (if a newer version is available)",
 			Requires: &cli.Requires{},
-			Action:   wrappedHttpPost("upgrade"),
+			Action:   wrappedHttpPost("system/upgrade"),
 		},
 		{
 			Name:     "version",
@@ -59,7 +59,7 @@ func generalID(c *cli.Context) {
 }
 
 func generalStatus(c *cli.Context) {
-	response := httpGet(c, "config/sync")
+	response := httpGet(c, "system/config/insync")
 	status := make(map[string]interface{})
 	json.Unmarshal(responseToBArray(response), &status)
 	if status["configInSync"] != true {
@@ -69,7 +69,7 @@ func generalStatus(c *cli.Context) {
 }
 
 func generalVersion(c *cli.Context) {
-	response := httpGet(c, "version")
+	response := httpGet(c, "system/version")
 	version := make(map[string]interface{})
 	json.Unmarshal(responseToBArray(response), &version)
 	prettyPrintJson(version)
