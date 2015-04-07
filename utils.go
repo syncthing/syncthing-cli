@@ -87,14 +87,14 @@ func newTableWriter() *tabwriter.Writer {
 }
 
 func getMyID(c *cli.Context) string {
-	response := httpGet(c, "system")
+	response := httpGet(c, "system/status")
 	data := make(map[string]interface{})
 	json.Unmarshal(responseToBArray(response), &data)
 	return data["myID"].(string)
 }
 
 func getConfig(c *cli.Context) config.Configuration {
-	response := httpGet(c, "config")
+	response := httpGet(c, "system/config")
 	config := config.Configuration{}
 	json.Unmarshal(responseToBArray(response), &config)
 	return config
@@ -103,7 +103,7 @@ func getConfig(c *cli.Context) config.Configuration {
 func setConfig(c *cli.Context, cfg config.Configuration) {
 	body, err := json.Marshal(cfg)
 	die(err)
-	response := httpPost(c, "config", string(body))
+	response := httpPost(c, "system/config", string(body))
 	if response.StatusCode != 200 {
 		die("Unexpected status code", response.StatusCode)
 	}

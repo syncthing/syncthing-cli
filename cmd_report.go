@@ -36,14 +36,14 @@ func init() {
 }
 
 func reportSystem(c *cli.Context) {
-	response := httpGet(c, "system")
+	response := httpGet(c, "system/status")
 	data := make(map[string]interface{})
 	json.Unmarshal(responseToBArray(response), &data)
 	prettyPrintJson(data)
 }
 
 func reportConnections(c *cli.Context) {
-	response := httpGet(c, "connections")
+	response := httpGet(c, "system/connections")
 	data := make(map[string]map[string]interface{})
 	json.Unmarshal(responseToBArray(response), &data)
 	var overall map[string]interface{}
@@ -63,7 +63,7 @@ func reportConnections(c *cli.Context) {
 }
 
 func reportUsage(c *cli.Context) {
-	response := httpGet(c, "report")
+	response := httpGet(c, "svc/report")
 	report := make(map[string]interface{})
 	json.Unmarshal(responseToBArray(response), &report)
 	prettyPrintJson(report)
