@@ -96,7 +96,7 @@ func foldersList(c *cli.Context) {
 			fmt.Fprintln(writer)
 		}
 		fmt.Fprintln(writer, "ID:\t", folder.ID, "\t")
-		fmt.Fprintln(writer, "Path:\t", folder.Path, "\t(directory)")
+		fmt.Fprintln(writer, "Path:\t", folder.RawPath, "\t(directory)")
 		fmt.Fprintln(writer, "Folder master:\t", folder.ReadOnly, "\t(master)")
 		fmt.Fprintln(writer, "Ignore permissions:\t", folder.IgnorePerms, "\t(permissions)")
 		fmt.Fprintln(writer, "Rescan interval in seconds:\t", folder.RescanIntervalS, "\t(rescan)")
@@ -120,8 +120,8 @@ func foldersAdd(c *cli.Context) {
 	abs, err := filepath.Abs(c.Args()[1])
 	die(err)
 	folder := config.FolderConfiguration{
-		ID:   c.Args()[0],
-		Path: filepath.Clean(abs),
+		ID:      c.Args()[0],
+		RawPath: filepath.Clean(abs),
 	}
 	cfg.Folders = append(cfg.Folders, folder)
 	setConfig(c, cfg)
@@ -161,7 +161,7 @@ func foldersGet(c *cli.Context) {
 		}
 		switch arg {
 		case "directory":
-			fmt.Println(folder.Path)
+			fmt.Println(folder.RawPath)
 		case "master":
 			fmt.Println(folder.ReadOnly)
 		case "permissions":
@@ -196,7 +196,7 @@ func foldersSet(c *cli.Context) {
 		}
 		switch arg {
 		case "directory":
-			cfg.Folders[i].Path = val
+			cfg.Folders[i].RawPath = val
 		case "master":
 			cfg.Folders[i].ReadOnly = parseBool(val)
 		case "permissions":
