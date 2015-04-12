@@ -26,7 +26,7 @@ func main() {
 	app.Flags = []cli.Flag{
 		cli.StringFlag{
 			Name:   "endpoint, e",
-			Value:  "http://127.0.0.1:8080",
+			Value:  "http://127.0.0.1:8384",
 			Usage:  "End point to connect to",
 			EnvVar: "STENDPOINT",
 		},
