@@ -51,8 +51,8 @@ func optionsDump(c *cli.Context) {
 	fmt.Fprintln(writer, "Reconnect interval in seconds:\t", cfg.ReconnectIntervalS, "\t(reconnect)")
 	fmt.Fprintln(writer, "Start browser:\t", cfg.StartBrowser, "\t(browser)")
 	fmt.Fprintln(writer, "Enable UPnP:\t", cfg.UPnPEnabled, "\t(upnp)")
-	fmt.Fprintln(writer, "UPnP Lease in minutes:\t", cfg.UPnPLease, "\t(upnplease)")
-	fmt.Fprintln(writer, "UPnP Renewal period in minutes:\t", cfg.UPnPRenewal, "\t(upnprenew)")
+	fmt.Fprintln(writer, "UPnP Lease in minutes:\t", cfg.UPnPLeaseM, "\t(upnplease)")
+	fmt.Fprintln(writer, "UPnP Renewal period in minutes:\t", cfg.UPnPRenewalM, "\t(upnprenew)")
 	fmt.Fprintln(writer, "Restart on Wake Up:\t", cfg.RestartOnWakeup, "\t(wake)")
 
 	reporting := "unrecognized value"
@@ -94,9 +94,9 @@ func optionsGet(c *cli.Context) {
 	case "upnp":
 		fmt.Println(cfg.UPnPEnabled)
 	case "upnplease":
-		fmt.Println(cfg.UPnPLease)
+		fmt.Println(cfg.UPnPLeaseM)
 	case "upnprenew":
-		fmt.Println(cfg.UPnPRenewal)
+		fmt.Println(cfg.UPnPRenewalM)
 	case "reporting":
 		switch cfg.URAccepted {
 		case -1:
@@ -147,9 +147,9 @@ func optionsSet(c *cli.Context) {
 	case "upnp":
 		config.Options.UPnPEnabled = parseBool(val)
 	case "upnplease":
-		config.Options.UPnPLease = parseUint(val)
+		config.Options.UPnPLeaseM = parseUint(val)
 	case "upnprenew":
-		config.Options.UPnPRenewal = parseUint(val)
+		config.Options.UPnPRenewalM = parseUint(val)
 	case "reporting":
 		switch strings.ToLower(val) {
 		case "u", "undecided", "unset":
