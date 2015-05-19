@@ -33,7 +33,12 @@ func init() {
 				Requires: &cli.Requires{"folder id"},
 				Action:   foldersRemove,
 			},
-
+			{
+				Name:     "override",
+				Usage:    "Override changes from other nodes for a master folder",
+				Requires: &cli.Requires{"folder id"},
+				Action:   foldersOverride,
+			},
 			{
 				Name:     "get",
 				Usage:    "Get a property of a folder",
@@ -140,6 +145,26 @@ func foldersRemove(c *cli.Context) {
 		}
 	}
 	die("Folder " + rid + " not found")
+}
+
+func foldersOverride(c *cli.Context) {
+	cfg := getConfig(c)
+	rid := c.Args()[0]
+	for _, folder := range cfg.Folders {
+		if folder.ID == rid && folder.ReadOnly {
+			response := httpPost(c, "db/override", "")
+			if response.StatusCode != 200 {
+				err := fmt.Sprint("Failed to override changes\nStatus code: ", response.StatusCode)
+				body := string(responseToBArray(response))
+				if body != "" {
+					err += "\nBody: " + body
+				}
+				die(err)
+			}
+			return
+		}
+	}
+	die("Folder " + rid + " not found or folder not master")
 }
 
 func foldersGet(c *cli.Context) {
