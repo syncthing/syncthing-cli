@@ -15,6 +15,7 @@ type APIClient struct {
 	apikey     string
 	username   string
 	password   string
+	id         string
 	csrf       string
 }
 
@@ -46,9 +47,10 @@ func getClient(c *cli.Context) *APIClient {
 	if client.apikey == "" {
 		request, err := http.NewRequest("GET", client.endpoint, nil)
 		die(err)
+		client.id = request.Header.Get("X-Syncthing-ID")
 		response := client.handleRequest(request)
 		for _, item := range response.Cookies() {
-			if item.Name == "CSRF-Token" {
+			if item.Name == "CSRF-Token-"+client.id[:5] {
 				client.csrf = item.Value
 				goto csrffound
 			}
@@ -68,7 +70,7 @@ func (client *APIClient) handleRequest(request *http.Request) *http.Response {
 		request.SetBasicAuth(client.username, client.password)
 	}
 	if client.csrf != "" {
-		request.Header.Set("X-CSRF-Token", client.csrf)
+		request.Header.Set("X-CSRF-Token-"+client.id[:5], client.csrf)
 	}
 
 	response, err := client.httpClient.Do(request)
