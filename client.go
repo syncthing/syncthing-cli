@@ -47,8 +47,11 @@ func getClient(c *cli.Context) *APIClient {
 	if client.apikey == "" {
 		request, err := http.NewRequest("GET", client.endpoint, nil)
 		die(err)
-		client.id = request.Header.Get("X-Syncthing-ID")
 		response := client.handleRequest(request)
+		client.id = response.Header.Get("X-Syncthing-ID")
+		if client.id == "" {
+			die("Failed to get device ID")
+		}
 		for _, item := range response.Cookies() {
 			if item.Name == "CSRF-Token-"+client.id[:5] {
 				client.csrf = item.Value
