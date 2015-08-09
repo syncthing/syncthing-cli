@@ -6,7 +6,7 @@ import (
 	"strings"
 
 	"github.com/AudriusButkevicius/cli"
-	"github.com/syncthing/syncthing/internal/config"
+	"github.com/syncthing/syncthing/lib/config"
 )
 
 func init() {

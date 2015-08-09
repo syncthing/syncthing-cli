@@ -15,7 +15,7 @@ import (
 
 	"github.com/AudriusButkevicius/cli"
 	"github.com/syncthing/protocol"
-	"github.com/syncthing/syncthing/internal/config"
+	"github.com/syncthing/syncthing/lib/config"
 )
 
 func responseToBArray(response *http.Response) []byte {
