@@ -1,0 +1,72 @@
+{
+	"ImportPath": "github.com/syncthing/syncthing-cli",
+	"GoVersion": "go1.5.1",
+	"Deps": [
+		{
+			"ImportPath": "github.com/AudriusButkevicius/cli",
+			"Comment": "1.0.0-100-g7f561c7",
+			"Rev": "7f561c78b5a4aad858d9fd550c92b5da6d55efbb"
+		},
+		{
+			"ImportPath": "github.com/bkaradzic/go-lz4",
+			"Rev": "74ddf82598bc4745b965729e9c6a463bedd33049"
+		},
+		{
+			"ImportPath": "github.com/calmh/du",
+			"Rev": "3c0690cca16228b97741327b1b6781397afbdb24"
+		},
+		{
+			"ImportPath": "github.com/calmh/logger",
+			"Rev": "c96f6a1a8c7b6bf2f4860c667867d90174799eb2"
+		},
+		{
+			"ImportPath": "github.com/calmh/luhn",
+			"Rev": "0c8388ff95fa92d4094011e5a04fc99dea3d1632"
+		},
+		{
+			"ImportPath": "github.com/calmh/xdr",
+			"Rev": "5f7208e86762911861c94f1849eddbfc0a60cbf0"
+		},
+		{
+			"ImportPath": "github.com/syncthing/syncthing/lib/config",
+			"Comment": "v0.12.0-beta1-121-g7fdfa81",
+			"Rev": "7fdfa81fb852350c1dfe9b7eeb5c6977603a542f"
+		},
+		{
+			"ImportPath": "github.com/syncthing/syncthing/lib/events",
+			"Comment": "v0.12.0-beta1-121-g7fdfa81",
+			"Rev": "7fdfa81fb852350c1dfe9b7eeb5c6977603a542f"
+		},
+		{
+			"ImportPath": "github.com/syncthing/syncthing/lib/osutil",
+			"Comment": "v0.12.0-beta1-121-g7fdfa81",
+			"Rev": "7fdfa81fb852350c1dfe9b7eeb5c6977603a542f"
+		},
+		{
+			"ImportPath": "github.com/syncthing/syncthing/lib/protocol",
+			"Comment": "v0.12.0-beta1-121-g7fdfa81",
+			"Rev": "7fdfa81fb852350c1dfe9b7eeb5c6977603a542f"
+		},
+		{
+			"ImportPath": "github.com/syncthing/syncthing/lib/sync",
+			"Comment": "v0.12.0-beta1-121-g7fdfa81",
+			"Rev": "7fdfa81fb852350c1dfe9b7eeb5c6977603a542f"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/bcrypt",
+			"Rev": "81bf7719a6b7ce9b665598222362b50122dfc13b"
+		},
+		{
+			"ImportPath": "golang.org/x/crypto/blowfish",
+			"Rev": "81bf7719a6b7ce9b665598222362b50122dfc13b"
+		},
+		{
+			"ImportPath": "golang.org/x/text/transform",
+			"Rev": "723492b65e225eafcba054e76ba18bb9c5ac1ea2"
+		},
+		{
+			"ImportPath": "golang.org/x/text/unicode/norm",
+			"Rev": "723492b65e225eafcba054e76ba18bb9c5ac1ea2"
+		}
+	]
+}

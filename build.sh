@@ -2,10 +2,9 @@
 set -euo pipefail
 set nullglob
 
-echo Get dependencies
-go get -d
-
 rm -rf syncthing-cli-*-*
+
+export GOPATH="$(pwd)/Godeps/_workspace:$GOPATH"
 
 build() {
 	export GOOS="$1"
@@ -15,7 +14,7 @@ build() {
 	mkdir "$target"
 	if [ -f syncthing-cli ] ; then
 		mv syncthing-cli "$target"
-		tar zcvf "$target.tar.gz" "$target" 
+		tar zcvf "$target.tar.gz" "$target"
 	fi
 	if [ -f syncthing-cli.exe ] ; then
 	      	mv syncthing-cli.exe "$target"
