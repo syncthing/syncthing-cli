@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"path/filepath"
 	"strings"
@@ -56,6 +57,12 @@ func init() {
 				Usage:    "Unset a property of a folder",
 				Requires: &cli.Requires{"folder id", "property"},
 				Action:   foldersUnset,
+			},
+			{
+				Name:     "filestatus",
+				Usage:    "Lists downloading and queued files of a folder",
+				Requires: &cli.Requires{"folder id"},
+				Action:   foldersFilestatus,
 			},
 			{
 				Name:     "devices",
@@ -267,6 +274,31 @@ func foldersUnset(c *cli.Context) {
 		return
 	}
 	die("Folder " + rid + " not found")
+}
+
+func foldersFilestatus(c *cli.Context) {
+	cfg := getConfig(c)
+	rid := c.Args()[0]
+	for _, folder := range cfg.Folders {
+		if folder.ID != rid {
+			continue
+		}
+		response := httpGet(c, "db/need" + "?folder=" + rid)
+		if response.StatusCode != 200 {
+			err := fmt.Sprint("Failed to get db/need\nStatus code: ", response.StatusCode)
+			body := string(responseToBArray(response))
+			if body != "" {
+				err += "\nBody: " + body
+			}
+			die(err)
+		}
+		filestatus := make(map[string]interface{})
+		json.Unmarshal(responseToBArray(response), &filestatus)
+		prettyPrintJson(filestatus)
+		// TODO: parse JSON and print results sensibly
+		return
+	}
+	die("Folder " + rid + " not found or folder not master")
 }
 
 func foldersDevicesList(c *cli.Context) {
