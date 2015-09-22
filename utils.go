@@ -14,8 +14,8 @@ import (
 	"unicode"
 
 	"github.com/AudriusButkevicius/cli"
-	"github.com/syncthing/protocol"
 	"github.com/syncthing/syncthing/lib/config"
+	"github.com/syncthing/syncthing/lib/protocol"
 )
 
 func responseToBArray(response *http.Response) []byte {
