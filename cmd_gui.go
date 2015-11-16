@@ -51,8 +51,9 @@ func guiDump(c *cli.Context) {
 		fmt.Fprintln(writer, "Authentication User:\t", cfg.User, "\t(username)")
 		fmt.Fprintln(writer, "Authentication Password:\t", cfg.Password, "\t(password)")
 	}
-	if cfg.APIKey != "" {
-		fmt.Fprintln(writer, "API Key:\t", cfg.APIKey, "\t(apikey)")
+	apiKey := cfg.APIKey()
+	if apiKey != "" {
+		fmt.Fprintln(writer, "API Key:\t", apiKey, "\t(apikey)")
 	}
 	writer.Flush()
 }
@@ -76,8 +77,9 @@ func guiGet(c *cli.Context) {
 			fmt.Println(cfg.Password)
 		}
 	case "apikey":
-		if cfg.APIKey != "" {
-			fmt.Println(cfg.APIKey)
+		apiKey := cfg.APIKey()
+		if apiKey != "" {
+			fmt.Println(apiKey)
 		}
 	default:
 		die("Invalid setting: " + arg + "\nAvailable settings: enabled, tls, address, user, password, apikey")
@@ -92,16 +94,16 @@ func guiSet(c *cli.Context) {
 	case "enabled":
 		cfg.GUI.Enabled = parseBool(val)
 	case "tls":
-		cfg.GUI.UseTLS = parseBool(val)
+		cfg.GUI.RawUseTLS = parseBool(val)
 	case "address":
 		validAddress(val)
-		cfg.GUI.Address = val
+		cfg.GUI.RawAddress = val
 	case "user":
 		cfg.GUI.User = val
 	case "password":
 		cfg.GUI.Password = val
 	case "apikey":
-		cfg.GUI.APIKey = val
+		cfg.GUI.RawAPIKey = val
 	default:
 		die("Invalid setting: " + arg + "\nAvailable settings: enabled, tls, address, user, password, apikey")
 	}
@@ -117,7 +119,7 @@ func guiUnset(c *cli.Context) {
 	case "password":
 		cfg.GUI.Password = ""
 	case "apikey":
-		cfg.GUI.APIKey = ""
+		cfg.GUI.RawAPIKey = ""
 	default:
 		die("Invalid setting: " + arg + "\nAvailable settings: user, password, apikey")
 	}
